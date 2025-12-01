@@ -80,7 +80,6 @@ def chart(filename):
         stream = io.BytesIO(blob_client.download_blob().readall())
         df = pd.read_csv(stream) if filename.lower().endswith(".csv") else pd.read_excel(stream)
 
-        # Null distribution
         distr_null = df.isnull().sum().value_counts()
         plt.figure(figsize=(10,6))
         distr_null.plot(kind="bar")
