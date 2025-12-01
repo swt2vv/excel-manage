@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Excel File Storage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+
+<body>
+  <header>
+    <div class="nav-wrapper">
+      <nav>
+        <div class="brand">
+          <a href="/gallery">Excel File<br>Manager</a>
+          <ul>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/summary">Summary Generator</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <body>
+
+    <div class="content-wrapper">
+      <section>
+        <h1>Rachel's Final Project</h1>
+        <p>
+          Welcome to Rachel's final project for DS 2022: Systems I: Intro to Computing.
+          As you navigate through this website, the gallery page allows you to
+          upload your excel files and they will be stored in a gallery. You can then see
+          auto-generation of some information about your excel file. I hope you like my site!!
+        </p>
+      </section>
+    </div>
+
+    <main> 
+      <section class="card"> 
+        <h3>Upload your Excel file here!</h3> 
+        <h4>When you upload your file below (csv only), it will be stored in the gallery</h4>
+        <div class="note"> 
+        Excel file will be stored in the Azure Blob container (public-read). Uploads require server credentials; viewing is public. 
+        </div> 
+        <form action="/api/v1/upload" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" accept=".csv" />
+          <button type="submit">Upload</button>
+        </form>
+      </section>
+
+
+      
+    <section class="card">
+      <h3>Gallery</h3>
+      {% if files %}
+        <ul>
+          {% for f in files %}
+            <li>
+              <a href="{{ cc.url }}/{{ f }}" target="_blank">{{ f }}</a>
+              <form action="/delete/{{ f }}" method="post" style="display:inline;">
+                <button type="submit" class="danger">Delete</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No Excel files yet. Upload one above.</p>
+      {% endif %}
+    </section>
+  </main>
+  
+  
+    <script>
+      const grid = document.getElementById('grid');
+      const countEl = document.getElementById('count');
+      const noteEl  = document.getElementById('galleryNote');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const uploadStatus = document.getElementById('uploadStatus');
+  
+      function setUploading(isUploading){
+        uploadBtn.disabled = isUploading;
+        uploadStatus.textContent = isUploading ? "Uploading… " : "";
+        if(isUploading){
+          uploadStatus.innerHTML = '<span class="spinner" style="vertical-align:-3px"></span> Uploading…';
+        }
+      }
+  
+      async function send(){
+        const fileInput = document.getElementById('f');
+        const file = fileInput.files[0];
+        if(!file){ alert("Choose a file first."); return; }
+        try{
+          setUploading(true);
+          const fd = new FormData();
+          fd.append("file", file);
+          const r = await fetch("/api/v1/upload", { method: "POST", body: fd });
+          const j = await r.json().catch(()=> ({}));
+          if(!r.ok || !j.ok){
+            throw new Error(j.error || ("Upload failed (" + r.status + ")"));
+          }
+          alert("Uploaded: " + j.url);
+          fileInput.value = "";
+          await loadGallery();
+        }catch(err){
+          console.error(err);
+          alert("Upload error: " + err.message);
+        }finally{
+          setUploading(false);
+        }
+      }
+  
+      function renderGallery(urls){
+        grid.innerHTML = "";
+        if(!Array.isArray(urls) || urls.length === 0){
+          countEl.textContent = "0 excel files";
+          noteEl.style.display = "block";
+          noteEl.textContent = "No excel files yet. Upload one above.";
+          return;
+        }
+        noteEl.style.display = "none";
+        countEl.textContent = urls.length + (urls.length === 1 ? " Excel File" : " Excel Files");
+        for(const u of urls){ 
+        const item = document.createElement("div");
+        item.className = "item"; const link = document.createElement("a"); 
+        link.href = u; link.textContent = u.split("/").pop(); 
+        link.target = "_blank"; item.appendChild(link); 
+        const cap = document.createElement("div"); 
+        cap.className = "cap"; 
+        cap.textContent = (u.split("/").pop() || u); 
+        item.appendChild(link); item.appendChild(cap); 
+        grid.appendChild(item);
+        }
+      }
+        async function loadGallery(){
+        grid.innerHTML = '<div class="muted" style="padding:.5rem 0;"><span class="spinner"></span> Loading gallery…</div>';
+        try{
+          const r = await fetch("/api/v1/gallery", { headers: { "Accept": "application/json" }});
+          const j = await r.json().catch(()=> ({}));
+          if(!r.ok || !j.ok){
+            throw new Error(j.error || ("Failed to load gallery (" + r.status + ")"));
+          }
+          renderGallery(j.gallery || []);
+        }catch(err){
+          console.error(err);
+          noteEl.style.display = "block";
+          noteEl.textContent = "Could not load gallery: " + err.message;
+          grid.innerHTML = "";
+          countEl.textContent = "0 files";
+        }
+      }
+  
+      document.addEventListener("DOMContentLoaded", loadGallery);
+    </script>
+
+  <footer>
+    Final Project Created By Rachel Earl · Inspired By Case Study 7: Blob Storage
+  </footer>
+</body>
+</html>

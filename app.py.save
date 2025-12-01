@@ -1,0 +1,16 @@
+from flask import Flask, request, jsonify, render_template
+
+
+
+AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+EXCEL_CONTAINER = "excel-container"
+bsc = BlobServiceClient.from_connection_string(AZURE_STORAGE_CONNECTION_STRING)
+cc  = bsc.get_container_client(IMAGES_CONTAINER)
+
+app = Flask(__name__)
+
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+

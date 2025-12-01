@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Excel File Storage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+
+<body>
+  <header>
+    <div class="nav-wrapper">
+      <nav>
+        <div class="brand">
+          <a href="/gallery">Excel File<br>Manager</a>
+          <ul>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/summary">Summary Generator</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="generate">
+      <h3>Generate your summary here!</h3>
+      <h4>Select one of the stored Excel files and a summary will be generated.</h4>
+ 
+      <form action="/api/v1/summary" method="get">
+        <legend>Select a file:</legend>
+        {% for file in files %}
+          <div>
+            <input type="radio" name="file" value="{{ file }}">
+            <label>{{ file }}</label>
+          </div>
+        {% endfor %}
+        <button type="submit">Next</button>
+      </form>
+   
+      {% if selected_file %}
+      <h3>Summary for {{ selected_file }}</h3>
+      
+      <div class="card">
+        <h4>Shape</h4>
+        <p>Rows: {{ shape[0] }}, Columns: {{ shape[1] }}</p>
+      </div>
+      
+      <div class="card">
+        <h4>Column Count</h4>
+        <p>Total Columns: {{ col_count }}</p>
+      </div>
+      
+      <div class="card">
+        <h4>Column Names</h4>
+        <p>{{ columns | join(', ') }}</p>
+      </div>
+
+      <div class="card">
+        <h3>Missing Values Per Column</h3>
+        {% if missing_info %}
+          <ul>
+            {% for col, count in missing_info.items() %}
+              <li>{{ col }}: {{ count }} rows missing</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No missing values detected.</p>
+        {% endif %}
+        </div>
+      
+      <div class="card">
+        <h3>Duplicate Rows</h3>
+        {% if duplicate_count > 0 %}
+          <p>{{ duplicate_count }} duplicate rows found.</p>
+        {% else %}
+          <p>No duplicate rows detected.</p>
+        {% endif %}
+      </div>
+
+      <div class="summary-section">
+        <h4>Null Distribution Graph</h4>
+        <img src="{{ url_for('chart', filename=selected_file) }}" alt="Null Distribution Graph"/>
+      </div>
+
+      <div class="summary-section">
+        <form action="/summary" method="get">
+          <button type="submit">Choose Another File</button>
+        </form>
+      </div>
+      {% endif %}
+    </section>
+  </main>
+
+  <footer>
+    Final Project Created By Rachel Earl · Inspired By Case Study 7: Blob Storage
+  </footer>
+</body>
+</html>
