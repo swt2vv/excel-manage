@@ -35,22 +35,30 @@ One limitation I set was that users can only upload CSV and xlsx. I did this bec
 ### 5) Results & Evaluation <br>
 The screenshots in the assests folder demonstrate the flow of use for a user wanting to upload, store, and generate a summary of a file. From this 
 Validation/tests performed and outcomes.
-![Docker](docker-running-and-logs.png)
+<br>
+
+![Docker](assets/screenshots/docker-running-and-logs.png)
 This image shows that the app.py has successfully run through Docker
 
-![pt1 Gallery Page](pt1-gallery-page.png)
+<br>
+
+![pt1 Gallery Page](assets/screenshots/pt1-gallery-page.png)
 Once you open the app.py, the gallery page will be displayed. 
+<br>
 
-![pt2 Choose File](pt2-click-choose-file.png)
+![pt2 Choose File](assets/screenshots/pt2-click-choose-file.png)
 Once you click the choose file button, the user is  allowed to upload and store their csv files to a blob storage container and they are listed in the gallery below. 
+<br>
 
-![pt3 File Stored ](pt3-file-stored-in-gallery.png)
+![pt3 File Stored ](assets/screenshots/pt3-file-stored-in-gallery.png)
 As you can see, the file is now stored and displayed in the gallery below. 
+<br>
 
-![pt4 Summary Page](pt4-summary-page.png)
+![pt4 Summary Page](assets/screenshots/pt4-summary-page.png)
 Now the user can navigate to the summary page. Here all the files from the gallery are options to select on this page. 
+<br>
 
-![pt5 Summary Generator](pt5-summary-generation-of-stored-file.png)
+![pt5 Summary Generator](assets/screenshots/pt5-summary-generation-of-stored-file.png)
 Once you select a file, the page will display several pieces of information about the file such as shape, column names, number of null values, and number of duplicates. There is also a graph generated of the null distribution, in other words, the sum of columns with a particular number of null values. 
 
 
