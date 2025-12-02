@@ -38,10 +38,7 @@
     <main> 
       <section class="card"> 
         <h3>Upload your Excel file here!</h3> 
-        <h4>When you upload your file below (csv only), it will be stored in the gallery</h4>
-        <div class="note"> 
-        Excel file will be stored in the Azure Blob container (public-read). Uploads require server credentials; viewing is public. 
-        </div> 
+        <h4>When you upload your file below, it will be stored in the gallery</h4>
         <form action="/api/v1/upload" method="post" enctype="multipart/form-data">
           <input type="file" name="file" accept=".csv" />
           <button type="submit">Upload</button>

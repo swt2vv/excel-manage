@@ -12,8 +12,8 @@ Data/Models/Services: For my testdata, I used a data set from Kaggle called "Mes
 ### 3) How to Run (Local): <br>
 I chose to use Docker:
 
-'''
-Dockerfile
+
+```dockerfile
 FROM python:3.11-slim
 WORKDIR /app
 COPY requirements.txt .
@@ -23,7 +23,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 EXPOSE 5000
 CMD ["python", "app.py"]
-'''
+
+
 
 ### 4) Design Decisions: <br>
 
