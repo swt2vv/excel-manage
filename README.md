@@ -8,6 +8,47 @@ Solution: In my web app, I allow users to upload their CSV files, store it in a 
 I used Azure's blob storage containers, taught in Case 7, to store the user's uploaded CSV files. These files are stored in the gallery on the gallery page, and are accessed in the summary page when generating a summary of the data. 
 Architecture Diagram: Include a PNG in /assets and embed it here.
 Data/Models/Services: For my testdata, I used a data set from Kaggle called "Messy-dataset" by user eyowhite (permalink: https://github.com/eyowhite/Messy-dataset/blob/feded56bde2cc1bd72455fc8842866ac3a67090a/messy_HR_data.csv). 
+<br>
+
+```text
+EXCEL-MANAGE
+│
+├── app.py 
+├── run.sh 
+├── Dockerfile  
+├── requirements.txt 
+├── README.md 
+│
+├── .env.example  
+├── .gitignore
+│
+├── __pycache__/
+│   └── app.cpython-313.pyc
+│
+├── assets/
+│   ├── screenshots/
+│   │   ├── docker-running-app.png
+│   │   ├── pt1-gallery-page.png
+│   │   ├── pt2-click-choose-file.png
+│   │   ├── pt3-file-stored-in-assets.png
+│   │   ├── pt4-summary-page.png
+│   │   └── pt5-summary-generated.png
+│   │
+│   └── testdata.csv 
+│
+├── static/
+│   └── main.css 
+│
+├── templates/
+│   ├── gallery.html 
+│   └── summary.html 
+│
+└── venv/
+    ├── bin/
+    ├── include/
+    ├── lib/
+    └── share/
+
 
 ### 3) How to Run (Local): <br>
 I chose to use Docker:
