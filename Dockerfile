@@ -6,4 +6,4 @@ ENV AZURE_STORAGE_CONNECTION_STRING='PASTE-CONNECTION-STRING-FROM-ENV'
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 EXPOSE 5000
-CMD ["python", "app.py"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
